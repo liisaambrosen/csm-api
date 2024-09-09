@@ -1,8 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { StreamsService } from './streams.service';
-import { getModelToken } from '@nestjs/mongoose';
 import { UserService } from '../user/user.service';
-import { Stream } from './schema/streams.schema';
 
 describe('StreamsService', () => {
   let service: StreamsService;
@@ -23,13 +21,6 @@ describe('StreamsService', () => {
           provide: UserService,
           useValue: {
             userById: jest.fn(),
-          },
-        },
-        {
-          provide: getModelToken(Stream.name),
-          useValue: {
-            countCurrentStreamsByUserId: jest.fn(),
-            newStream: jest.fn(),
           },
         },
       ],
