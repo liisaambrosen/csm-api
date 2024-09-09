@@ -18,4 +18,10 @@ export class UserService {
     const user = new this.userModel({ username, streams_limit: streamsLimit });
     return user.save();
   }
+
+  async userById(id: string): Promise<User> {
+    const user = await this.userModel.findById(id).exec();
+    if (!user) throw new Error(`There is no user with id: ${id}`);
+    return user;
+  }
 }
