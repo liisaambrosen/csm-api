@@ -30,4 +30,12 @@ export class StreamsService {
     const stream = new this.streamModel({ user_id: userId });
     return stream.save();
   }
+
+  async endStream(id: string): Promise<Stream> {
+    const stream = await this.streamModel.findById(id).exec();
+    if (!stream) throw new Error('Stream not found');
+    if (stream.end_time) throw new Error('Stream has already ended');
+    stream.end_time = new Date();
+    return stream.save();
+  }
 }

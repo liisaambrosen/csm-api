@@ -1,10 +1,10 @@
 import {
   Controller,
   Post,
-  Get,
-  Put,
+  Patch,
   Res,
   Body,
+  Param,
   HttpStatus,
 } from '@nestjs/common';
 import { NewStreamDto } from './dto/new-stream.dto';
@@ -30,32 +30,19 @@ export class StreamsController {
       });
     }
   }
-  @Get()
-  listCurrentStreams() {
-    return 'user has x streams';
-  }
-  @Put()
-  endStream() {
-    console.log('stream ended');
+
+  @Patch(':id/end')
+  async endStream(@Param('id') id: string, @Res() response) {
+    try {
+      const endStream = await this.streamsService.endStream(id);
+      return response.status(HttpStatus.OK).json({
+        message: 'Stream ended successfully',
+        endStream,
+      });
+    } catch (err) {
+      return response.status(HttpStatus.BAD_REQUEST).json({
+        message: `Could not end stream: ${err.message}`,
+      });
+    }
   }
 }
-
-// async registerUser(
-//   @Body() registerUserDto: RegisterUserDto,
-//   @Res() response,
-// ) {
-//   try {
-//     const newUser = await this.userService.register(
-//       registerUserDto.username,
-//       registerUserDto.streams_limit,
-//     );
-//     return response.status(HttpStatus.CREATED).json({
-//       message: 'User registered successfully',
-//       newUser,
-//     });
-//   } catch (err) {
-//     return response.status(HttpStatus.BAD_REQUEST).json({
-//       message: `Could not register user: ${err.message}`,
-//     });
-//   }
-// }
